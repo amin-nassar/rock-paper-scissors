@@ -54,6 +54,19 @@ body {
   border: 3px solid var(--header-outline);
   border-radius: 16px;
 
+  & .logo {
+    align-self: stretch;
+    width: 155px;
+    background-image: url("./images/logo.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center left;
+
+    &.bonus {
+      background-image: url("./images/logo-bonus.svg");
+    }
+  }
+
   & .score {
     display: flex;
     flex-direction: column;
@@ -82,10 +95,6 @@ body {
 
   @media screen and (max-width: 425px) {
     padding: 12px;
-
-    & img {
-      height: 48px;
-    }
 
     & .score {
       padding: 10px 22px;
