@@ -1,63 +1,32 @@
-const GAME_MODES = {
-  ORIGINAL: "ORIGINAL",
-  BONUS: "BONUS",
+const GAME_MODES = { ORIGINAL: "ORIGINAL", BONUS: "BONUS" };
+
+const ORIGINAL_RULES = {
+  rock: ["scissors"],
+  paper: ["rock"],
+  scissors: ["paper"],
+};
+
+const BONUS_RULES = {
+  rock: ["scissors", "lizard"],
+  paper: ["rock", "spock"],
+  scissors: ["paper", "lizard"],
+  lizard: ["spock", "paper"],
+  spock: ["scissors", "rock"],
+};
+
+const RULES_BY_MODE = {
+  [GAME_MODES.ORIGINAL]: ORIGINAL_RULES,
+  [GAME_MODES.BONUS]: BONUS_RULES,
 };
 
 const RULES_IMG_PATH_BY_MODE = {
   [GAME_MODES.ORIGINAL]: "./images/image-rules.svg",
   [GAME_MODES.BONUS]: "./images/image-rules-bonus.svg",
 };
-
-const RULES = {
-  rock: ["scissors", "lizard"],
-  paper: ["rock", "Spock"],
-  scissors: ["paper", "lizard"],
-  lizard: ["Spock", "paper"],
-  spock: ["scissors", "rock"],
+const STORAGE_KEYS = {
+  SCORE: "rps_score",
+  MODE: "rps_mode",
 };
-
-let mode = GAME_MODES.ORIGINAL;
-
-const modeButton = document.getElementById("mode");
-const logoDiv = document.querySelector(".logo");
-
-const chooseScreen = document.querySelector(".choose");
-const waitingScreen = document.querySelector(".waiting");
-const revealScreen = document.querySelector(".reveal");
-
-const choiceButtons = chooseScreen.querySelectorAll("button");
-
-const rulesImg = document.getElementById("rules-img");
-
-modeButton.addEventListener("click", () => {
-  const isOriginal = mode === GAME_MODES.ORIGINAL;
-  setMode(isOriginal ? GAME_MODES.BONUS : GAME_MODES.ORIGINAL);
-});
-
-function setMode(newMode) {
-  mode = newMode;
-  modeButton.textContent = newMode;
-
-  logoDiv.classList.toggle("bonus");
-  chooseScreen.classList.toggle("bonus");
-  choiceButtons.forEach((btn) => btn.classList.toggle("bonus"));
-
-  rulesImg.src = RULES_IMG_PATH_BY_MODE[newMode];
-
-  resetGame();
-}
-
-const openRulesBtn = document.getElementById("open-rules");
-const closeRulesBtn = document.getElementById("close-rules");
-const dialog = document.querySelector("dialog");
-
-openRulesBtn.addEventListener("click", () => {
-  dialog.showModal();
-});
-
-closeRulesBtn.addEventListener("click", () => {
-  dialog.close();
-});
 
 const screens = {
   choose: document.querySelector(".choose"),
@@ -65,36 +34,98 @@ const screens = {
   reveal: document.querySelector(".reveal"),
 };
 
+const choiceButtons = screens.choose.querySelectorAll("button");
+const modeButton = document.getElementById("mode");
+const logoDiv = document.querySelector(".logo");
+const scoreElement = document.querySelector("header .score .number");
+const rulesImg = document.getElementById("rules-img");
+const openRulesBtn = document.getElementById("open-rules");
+const closeRulesBtn = document.getElementById("close-rules");
+const dialog = document.querySelector("dialog");
+const playAgainButton = document.getElementById("play-again");
+
+let score;
+let mode;
+let rules;
+
+function initializeGame() {
+  score = parseInt(localStorage.getItem(STORAGE_KEYS.SCORE)) || 0;
+  mode = localStorage.getItem(STORAGE_KEYS.MODE) || GAME_MODES.ORIGINAL;
+  scoreElement.textContent = score;
+
+  attachEventListeners();
+  setMode(mode);
+  resetGame();
+}
+
+function attachEventListeners() {
+  modeButton.addEventListener("click", toggleMode);
+  openRulesBtn.addEventListener("click", () => dialog.showModal());
+  closeRulesBtn.addEventListener("click", () => dialog.close());
+  playAgainButton.addEventListener("click", resetGame);
+
+  screens.choose.addEventListener("click", (e) => {
+    const userChoice = e.target.dataset.choice;
+    if (!(userChoice in rules)) return;
+    selectUserChoice(userChoice);
+  });
+}
+
+function toggleMode() {
+  const newMode =
+    mode === GAME_MODES.ORIGINAL ? GAME_MODES.BONUS : GAME_MODES.ORIGINAL;
+  setMode(newMode);
+}
+
+function setMode(newMode) {
+  mode = newMode;
+  localStorage.setItem(STORAGE_KEYS.MODE, newMode);
+
+  modeButton.textContent = newMode;
+  logoDiv.classList.toggle("bonus", newMode === GAME_MODES.BONUS);
+  screens.choose.classList.toggle("bonus", newMode === GAME_MODES.BONUS);
+  choiceButtons.forEach((btn) =>
+    btn.classList.toggle("bonus", newMode === GAME_MODES.BONUS)
+  );
+
+  rules = RULES_BY_MODE[newMode];
+
+  rulesImg.src = RULES_IMG_PATH_BY_MODE[newMode];
+  resetGame();
+}
+
+function resetGame() {
+  switchScreen("choose");
+  document.querySelector(".winner")?.classList.remove("winner");
+}
+
 function switchScreen(name) {
   Object.values(screens).forEach((screen) => screen.classList.remove("active"));
   screens[name].classList.add("active");
 }
 
 function getHouseChoice() {
-  const options = Object.keys(RULES);
-
-  const computerChoice = options[Math.floor(Math.random() * options.length)];
-
-  return computerChoice;
+  const options = Object.keys(rules);
+  return options[Math.floor(Math.random() * options.length)];
 }
 
-function determineWinner(player1, player2) {
-  if (player1 === player2) return "tie";
-  if (RULES[player1]?.includes(player2)) return "win";
-  return "lose";
+function determineWinner(player, computer) {
+  if (player === computer) return "tie";
+  return rules[player]?.includes(computer) ? "win" : "lose";
 }
 
 function selectUserChoice(userChoice) {
-  waitingScreen
+  screens.waiting
     .querySelector(".choice-btn")
     .setAttribute("data-choice", userChoice);
   switchScreen("waiting");
 
   const houseChoice = getHouseChoice();
+
   setTimeout(() => {
-    const [user, house] = screens.reveal.querySelectorAll(".choice-btn");
-    user.setAttribute("data-choice", userChoice);
-    house.setAttribute("data-choice", houseChoice);
+    const [userBtn, houseBtn] = screens.reveal.querySelectorAll(".choice-btn");
+    userBtn.setAttribute("data-choice", userChoice);
+    houseBtn.setAttribute("data-choice", houseChoice);
 
     const result = determineWinner(userChoice, houseChoice);
     document.getElementById("result-text").textContent = {
@@ -103,27 +134,18 @@ function selectUserChoice(userChoice) {
       tie: "Draw",
     }[result];
 
-    const score = document.querySelector("header .score .number");
-    score.textContent = +score.textContent + +(result === "win");
+    if (result === "win") {
+      score++;
+      localStorage.setItem(STORAGE_KEYS.SCORE, score);
+      scoreElement.textContent = score;
+    }
 
     switchScreen("reveal");
+
     if (result !== "tie") {
-      (result === "lose" ? house : user).classList.toggle("winner");
+      (result === "lose" ? houseBtn : userBtn).classList.add("winner");
     }
   }, 3000);
 }
 
-screens.choose.addEventListener("click", (e) => {
-  const userChoice = e.target.dataset.choice;
-  if (!(userChoice in RULES)) return;
-
-  selectUserChoice(userChoice);
-});
-
-const playAgainButton = document.getElementById("play-again");
-
-playAgainButton.addEventListener("click", resetGame);
-function resetGame() {
-  switchScreen("choose");
-  document.querySelector(".winner").classList.toggle("winner");
-}
+initializeGame();
