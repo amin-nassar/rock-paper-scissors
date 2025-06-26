@@ -81,7 +81,6 @@ function setMode(newMode) {
   mode = newMode;
   localStorage.setItem(STORAGE_KEYS.MODE, newMode);
 
-  modeButton.textContent = newMode;
   logoDiv.classList.toggle("bonus", newMode === GAME_MODES.BONUS);
   screens.choose.classList.toggle("bonus", newMode === GAME_MODES.BONUS);
   choiceButtons.forEach((btn) =>

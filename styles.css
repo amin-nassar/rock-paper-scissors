@@ -469,6 +469,8 @@ footer {
 
   @media screen and (max-width: 425px) {
     flex-direction: column;
+    width: fit-content;
+    align-items: stretch;
     gap: 16px;
   }
 
