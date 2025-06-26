@@ -111,6 +111,57 @@ body {
   }
 }
 
+.choice-btn {
+  border-radius: 50%;
+  aspect-ratio: 1;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 45%;
+  background-color: white;
+  border-style: solid;
+  cursor: pointer;
+  pointer-events: auto;
+
+  &.disabled {
+    pointer-events: none;
+    cursor: default;
+  }
+
+  &:hover {
+    outline: 24px solid rgba(255, 255, 255, 0.05);
+  }
+}
+
+.choice-btn[data-choice="scissors"] {
+  background-image: url("./images/icon-scissors.svg");
+  box-shadow: 0 8px #cb7f1a, inset 0 7px #cad5d6;
+  border-color: var(--scissors-gradient-start);
+}
+
+.choice-btn[data-choice="rock"] {
+  background-image: url("./images/icon-rock.svg");
+  box-shadow: 0 8px #a90f2b, inset 0 7px #cad5d6;
+  border-color: var(--rock-gradient-start);
+}
+
+.choice-btn[data-choice="paper"] {
+  background-image: url("./images/icon-paper.svg");
+  box-shadow: 0 8px #3550d4, inset 0 7px #cad5d6;
+  border-color: var(--paper-gradient-start);
+}
+
+.choice-btn[data-choice="lizard"] {
+  background-image: url("./images/icon-lizard.svg");
+  box-shadow: 0 8px #683db8, inset 0 7px #cad5d6;
+  border-color: var(--lizard-gradient-start);
+}
+
+.choice-btn[data-choice="spock"] {
+  background-image: url("./images/icon-spock.svg");
+  box-shadow: 0 8px #3691a1, inset 0 7px #cad5d6;
+  border-color: var(--spock-gradient-start);
+}
+
 main {
   padding-block: 80px;
 }
@@ -135,14 +186,8 @@ main {
   margin-block: 24px 80px;
   margin-inline: auto;
 
-  & button {
+  & .choice-btn {
     position: absolute;
-    border-radius: 50%;
-    aspect-ratio: 1;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 45%;
-    background-color: white;
 
     border-width: 24px;
     border-style: solid;
@@ -152,118 +197,59 @@ main {
       width: 145px;
     }
 
-    cursor: pointer;
+    &[data-choice="scissors"] {
+      top: -30%;
+      right: -30%;
 
-    &:hover {
-      outline: 24px solid rgba(255, 255, 255, 0.05);
+      &.bonus {
+        left: 0;
+        right: 0;
+        margin-inline: auto;
+        top: -20%;
+      }
     }
-  }
 
-  & button[data-choice="scissors"] {
-    background-image: url("./images/icon-scissors.svg");
-    box-shadow: 0 8px #cb7f1a, inset 0 7px #cad5d6;
-    border-color: hsl(39, 89%, 49%);
-
-    top: -30%;
-    right: -30%;
-
-    &.bonus {
-      left: 0;
-      right: 0;
+    &[data-choice="rock"] {
       margin-inline: auto;
-      top: -20%;
-    }
-  }
-
-  & button[data-choice="rock"] {
-    background-image: url("./images/icon-rock.svg");
-    box-shadow: 0 8px #a90f2b, inset 0 7px #cad5d6;
-    border-color: hsl(349, 71%, 52%);
-
-    margin-inline: auto;
-    left: 0;
-    right: 0;
-    bottom: -20%;
-
-    &.bonus {
-      bottom: unset;
-      left: unset;
-      top: 70%;
-      right: 0;
-    }
-  }
-
-  & button[data-choice="paper"] {
-    background-image: url("./images/icon-paper.svg");
-    box-shadow: 0 8px #3550d4, inset 0 7px #cad5d6;
-    border-color: hsl(230, 89%, 62%);
-
-    top: -30%;
-    left: -30%;
-
-    &.bonus {
-      left: unset;
-      top: 15%;
-      right: -20%;
-    }
-  }
-
-  & button[data-choice="lizard"] {
-    display: none;
-    background-image: url("./images/icon-lizard.svg");
-    box-shadow: 0 8px #683db8, inset 0 7px #cad5d6;
-    border-color: hsl(261, 73%, 60%);
-
-    &.bonus {
-      display: block;
-      top: 70%;
       left: 0;
+      right: 0;
+      bottom: -20%;
+
+      &.bonus {
+        bottom: unset;
+        left: unset;
+        top: 70%;
+        right: 0;
+      }
     }
-  }
 
-  & button[data-choice="spock"] {
-    display: none;
-    background-image: url("./images/icon-spock.svg");
-    box-shadow: 0 8px #3691a1, inset 0 7px #cad5d6;
-    border-color: hsl(189, 59%, 53%);
+    &[data-choice="paper"] {
+      top: -30%;
+      left: -30%;
 
-    &.bonus {
-      display: block;
-      top: 15%;
-      left: -20%;
+      &.bonus {
+        left: unset;
+        top: 15%;
+        right: -20%;
+      }
     }
-  }
-}
 
-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    &[data-choice="lizard"] {
+      display: none;
+      &.bonus {
+        display: block;
+        top: 70%;
+        left: 0;
+      }
+    }
 
-  padding-inline: 32px;
-  margin: 16px auto;
-  max-width: 1320px;
-
-  @media screen and (max-width: 425px) {
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  & .btn {
-    font-size: 16px;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    color: #fff;
-    background-color: transparent;
-
-    padding: 12px 36px;
-
-    border-radius: 8px;
-    border: 1px solid #fff;
-
-    cursor: pointer;
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.2);
+    &[data-choice="spock"] {
+      display: none;
+      &.bonus {
+        display: block;
+        top: 15%;
+        left: -20%;
+      }
     }
   }
 }
@@ -303,20 +289,9 @@ footer {
     }
   }
 
-  & .user-choice {
-    & button {
-      border-radius: 50%;
-      aspect-ratio: 1;
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: 45%;
-      background-color: white;
-      border-width: 32px;
-      border-style: solid;
-      width: 292px;
-      cursor: pointer;
-      pointer-events: none;
-    }
+  & .choice-btn {
+    border-width: 32px;
+    width: 292px;
   }
 
   @media screen and (max-width: 640px) {
@@ -336,7 +311,7 @@ footer {
       width: 110px;
     }
 
-    & .user-choice button {
+    & .choice-btn {
       border-width: 15px;
       width: 130px;
     }
@@ -356,18 +331,9 @@ footer {
     align-items: center;
     gap: 64px;
 
-    & button {
-      border-radius: 50%;
-      aspect-ratio: 1;
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: 45%;
-      background-color: white;
+    & .choice-btn {
       border-width: 32px;
-      border-style: solid;
       width: 292px;
-      cursor: pointer;
-      pointer-events: none;
     }
 
     & p {
@@ -415,8 +381,8 @@ footer {
   @media screen and (max-width: 992px) {
     flex-wrap: wrap;
 
-    & .user-choice button,
-    & .computer-choice button {
+    & .user-choice .choice-btn,
+    & .computer-choice .choice-btn {
       width: 130px;
       border-width: 15px;
     }
@@ -438,6 +404,39 @@ footer {
     & .computer-choice p {
       font-size: 15px;
       letter-spacing: 1.88px;
+    }
+  }
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding-inline: 32px;
+  margin: 16px auto;
+  max-width: 1320px;
+
+  @media screen and (max-width: 425px) {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  & .btn {
+    font-size: 16px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #fff;
+    background-color: transparent;
+
+    padding: 12px 36px;
+
+    border-radius: 8px;
+    border: 1px solid #fff;
+
+    cursor: pointer;
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.2);
     }
   }
 }
