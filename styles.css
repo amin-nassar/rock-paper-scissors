@@ -208,6 +208,7 @@ body {
     content: "";
     position: absolute;
     inset: -32px;
+    bottom: -40px;
     border-radius: 50%;
     z-index: -1;
     box-shadow: 0 0 0 var(--glow-ring-sm) rgba(255, 255, 255, 0.2),
@@ -217,6 +218,7 @@ body {
 
     @media screen and (max-width: 992px) {
       inset: -15px;
+      bottom: -23px;
       --glow-ring-sm: 18px;
       --glow-ring-md: 45px;
       --glow-ring-lg: 75px;
@@ -275,10 +277,20 @@ main {
   height: 285px;
   margin: 24px auto 80px;
 
+  @media screen and (max-width: 480px) {
+    width: 275px;
+    height: 250px;
+  }
+
   &.bonus {
     background-image: url("./images/bg-pentagon.svg");
     width: 345px;
     height: 345px;
+
+    @media screen and (max-width: 480px) {
+      width: 300px;
+      height: 300px;
+    }
   }
 
   & .choice-btn {
@@ -286,19 +298,39 @@ main {
     border-width: 24px;
     width: 198px;
 
+    @media screen and (max-width: 480px) {
+      width: 130px;
+      border-width: 15px;
+    }
+
     &.bonus {
       width: 145px;
+      border-width: 16px;
+
+      @media (max-width: 480px) {
+        width: 98px;
+        border-width: 12px;
+      }
     }
 
     &[data-choice="scissors"] {
       top: -30%;
       right: -30%;
 
+      @media screen and (max-width: 480px) {
+        top: -20%;
+        right: -15%;
+      }
+
       &.bonus {
         left: 0;
         right: 0;
         margin-inline: auto;
         top: -20%;
+
+        @media screen and (max-width: 480px) {
+          top: -10%;
+        }
       }
     }
 
@@ -313,6 +345,10 @@ main {
         left: unset;
         top: 70%;
         right: 0;
+
+        @media screen and (max-width: 480px) {
+          top: 75%;
+        }
       }
     }
 
@@ -320,10 +356,20 @@ main {
       top: -30%;
       left: -30%;
 
+      @media screen and (max-width: 480px) {
+        top: -20%;
+        left: -15%;
+      }
+
       &.bonus {
         left: unset;
         top: 15%;
         right: -20%;
+
+        @media screen and (max-width: 480px) {
+          top: 20%;
+          right: -10%;
+        }
       }
     }
 
@@ -334,6 +380,10 @@ main {
         display: block;
         top: 70%;
         left: 0;
+
+        @media screen and (max-width: 480px) {
+          top: 75%;
+        }
       }
     }
 
@@ -344,6 +394,11 @@ main {
         display: block;
         top: 15%;
         left: -20%;
+
+        @media screen and (max-width: 480px) {
+          top: 20%;
+          left: -10%;
+        }
       }
     }
   }
