@@ -109,6 +109,8 @@ function determineWinner(player, computer) {
 }
 
 function selectUserChoice(userChoice) {
+  modeButton.style.visibility = "hidden";
+
   const userChoiceBtn = screens.waiting.querySelector(".choice-btn");
   userChoiceBtn.setAttribute("data-choice", userChoice);
   switchScreen("waiting");
@@ -135,6 +137,7 @@ function selectUserChoice(userChoice) {
     scoreElement.textContent = score;
 
     switchScreen("reveal");
+    modeButton.style.visibility = "visible";
 
     if (result === "tie") return;
     const winnerBtn = result === "win" ? userBtn : houseBtn;
