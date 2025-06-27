@@ -304,6 +304,24 @@ main {
   }
 }
 
+@keyframes bounce {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.2);
+  }
+  50% {
+    transform: scale(0.9);
+  }
+  70% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 .waiting {
   display: none;
   align-items: stretch;
@@ -336,6 +354,7 @@ main {
       width: 225px;
       border-radius: 50%;
       background-color: rgba(0, 0, 0, 0.1);
+      animation: bounce 0.8s ease-in-out infinite;
     }
   }
 
