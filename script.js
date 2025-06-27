@@ -23,10 +23,8 @@ const RULES_IMG_PATH_BY_MODE = {
   [GAME_MODES.ORIGINAL]: "./images/image-rules.svg",
   [GAME_MODES.BONUS]: "./images/image-rules-bonus.svg",
 };
-const STORAGE_KEYS = {
-  SCORE: "rps_score",
-  MODE: "rps_mode",
-};
+
+const STORAGE_KEYS = { SCORE: "rps_score", MODE: "rps_mode" };
 
 const screens = {
   choose: document.querySelector(".choose"),
@@ -37,16 +35,14 @@ const screens = {
 const choiceButtons = screens.choose.querySelectorAll("button");
 const modeButton = document.getElementById("mode");
 const logoDiv = document.querySelector(".logo");
-const scoreElement = document.querySelector("header .score .number");
+const scoreElement = document.querySelector(".score .number");
 const rulesImg = document.getElementById("rules-img");
 const openRulesBtn = document.getElementById("open-rules");
 const closeRulesBtn = document.getElementById("close-rules");
 const dialog = document.querySelector("dialog");
 const playAgainButton = document.getElementById("play-again");
 
-let score;
-let mode;
-let rules;
+let score, mode, rules;
 
 function initializeGame() {
   score = parseInt(localStorage.getItem(STORAGE_KEYS.SCORE)) || 0;
@@ -81,11 +77,10 @@ function setMode(newMode) {
   mode = newMode;
   localStorage.setItem(STORAGE_KEYS.MODE, newMode);
 
-  logoDiv.classList.toggle("bonus", newMode === GAME_MODES.BONUS);
-  screens.choose.classList.toggle("bonus", newMode === GAME_MODES.BONUS);
-  choiceButtons.forEach((btn) =>
-    btn.classList.toggle("bonus", newMode === GAME_MODES.BONUS)
-  );
+  const isBonus = newMode === GAME_MODES.BONUS;
+  logoDiv.classList.toggle("bonus", isBonus);
+  screens.choose.classList.toggle("bonus", isBonus);
+  choiceButtons.forEach((btn) => btn.classList.toggle("bonus", isBonus));
 
   rules = RULES_BY_MODE[newMode];
 
@@ -114,9 +109,8 @@ function determineWinner(player, computer) {
 }
 
 function selectUserChoice(userChoice) {
-  screens.waiting
-    .querySelector(".choice-btn")
-    .setAttribute("data-choice", userChoice);
+  const userChoiceBtn = screens.waiting.querySelector(".choice-btn");
+  userChoiceBtn.setAttribute("data-choice", userChoice);
   switchScreen("waiting");
 
   const houseChoice = getHouseChoice();
@@ -142,10 +136,10 @@ function selectUserChoice(userChoice) {
 
     switchScreen("reveal");
 
-    if (result !== "tie") {
-      (result === "lose" ? houseBtn : userBtn).classList.add("winner");
-    }
-  }, 3000);
+    if (result === "tie") return;
+    const winnerBtn = result === "win" ? userBtn : houseBtn;
+    winnerBtn.classList.add("winner");
+  }, 2000);
 }
 
 initializeGame();

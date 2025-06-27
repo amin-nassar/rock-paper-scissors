@@ -33,6 +33,7 @@
 
 body {
   font-family: "Barlow Semi Condensed", sans-serif;
+  text-transform: uppercase;
   background: radial-gradient(
     at top,
     var(--radial-gradient-start),
@@ -48,19 +49,15 @@ body {
   align-items: center;
   height: fit-content;
   width: clamp(300px, 85%, 700px);
-  margin-bottom: 64px;
   padding: 18px 24px 18px 32px;
-  margin-inline: auto;
+  margin: 0 auto 64px;
   border: 3px solid var(--header-outline);
   border-radius: 16px;
 
   & .logo {
     align-self: stretch;
     width: 155px;
-    background-image: url("./images/logo.svg");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center left;
+    background: url("./images/logo.svg") no-repeat center left / contain;
 
     &.bonus {
       background-image: url("./images/logo-bonus.svg");
@@ -83,7 +80,6 @@ body {
       font-weight: 600;
       color: var(--score-text);
       letter-spacing: 2.5px;
-      text-transform: uppercase;
     }
 
     & .number {
@@ -111,20 +107,58 @@ body {
   }
 }
 
+/* -------- Key Frames -------- */
+
+@keyframes bounce {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.2);
+  }
+  50% {
+    transform: scale(0.9);
+  }
+  70% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes glow-rings {
+  0% {
+    box-shadow: none;
+  }
+
+  33% {
+    box-shadow: 0 0 0 var(--glow-ring-sm) rgba(255, 255, 255, 0.2);
+  }
+
+  66% {
+    box-shadow: 0 0 0 var(--glow-ring-sm) rgba(255, 255, 255, 0.2),
+      0 0 0 var(--glow-ring-md) rgba(255, 255, 255, 0.1);
+  }
+
+  100% {
+    box-shadow: 0 0 0 var(--glow-ring-sm) rgba(255, 255, 255, 0.2),
+      0 0 0 var(--glow-ring-md) rgba(255, 255, 255, 0.1),
+      0 0 0 var(--glow-ring-lg) rgba(255, 255, 255, 0.05);
+  }
+}
+
 .choice-btn {
   border-radius: 50%;
   aspect-ratio: 1;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 45%;
-  background-color: white;
+  background: white no-repeat center / 45%;
   border-style: solid;
   cursor: pointer;
   pointer-events: auto;
 
   &.disabled {
-    pointer-events: none;
     cursor: default;
+    pointer-events: none;
   }
 
   &:hover {
@@ -165,49 +199,28 @@ body {
 .winner {
   position: relative;
   z-index: 1;
-}
 
-.winner::before {
-  --glow-ring-sm: 65px;
-  --glow-ring-md: 135px;
-  --glow-ring-lg: 218px;
+  &::before {
+    --glow-ring-sm: 65px;
+    --glow-ring-md: 135px;
+    --glow-ring-lg: 218px;
 
-  content: "";
-  position: absolute;
-  inset: -32px;
-  border-radius: 50%;
-  z-index: -1;
-  box-shadow: 0 0 0 var(--glow-ring-sm) rgba(255, 255, 255, 0.2),
-    0 0 0 var(--glow-ring-md) rgba(255, 255, 255, 0.1),
-    0 0 0 var(--glow-ring-lg) rgba(255, 255, 255, 0.05);
-  animation: winner-pulse 1.2s ease-out 1;
-
-  @media screen and (max-width: 992px) {
-    inset: -15px;
-    --glow-ring-sm: 18px;
-    --glow-ring-md: 45px;
-    --glow-ring-lg: 75px;
-  }
-}
-
-@keyframes winner-pulse {
-  0% {
-    box-shadow: none;
-  }
-
-  33% {
-    box-shadow: 0 0 0 var(--glow-ring-sm) rgba(255, 255, 255, 0.2);
-  }
-
-  66% {
-    box-shadow: 0 0 0 var(--glow-ring-sm) rgba(255, 255, 255, 0.2),
-      0 0 0 var(--glow-ring-md) rgba(255, 255, 255, 0.1);
-  }
-
-  100% {
+    content: "";
+    position: absolute;
+    inset: -32px;
+    border-radius: 50%;
+    z-index: -1;
     box-shadow: 0 0 0 var(--glow-ring-sm) rgba(255, 255, 255, 0.2),
       0 0 0 var(--glow-ring-md) rgba(255, 255, 255, 0.1),
       0 0 0 var(--glow-ring-lg) rgba(255, 255, 255, 0.05);
+    animation: glow-rings 1.2s ease-out 1;
+
+    @media screen and (max-width: 992px) {
+      inset: -15px;
+      --glow-ring-sm: 18px;
+      --glow-ring-md: 45px;
+      --glow-ring-lg: 75px;
+    }
   }
 }
 
@@ -215,17 +228,52 @@ main {
   padding-block: 80px;
 }
 
-.choose {
+:is(.choose, .waiting, .reveal) {
   display: none;
+
+  &.active {
+    display: flex;
+  }
+}
+
+:is(.waiting, .reveal) .choice-btn {
+  border-width: 32px;
+  width: 292px;
+}
+
+@media screen and (max-width: 992px) {
+  .reveal .choice-btn {
+    border-width: 15px;
+    width: 130px;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .waiting .choice-btn {
+    border-width: 15px;
+    width: 130px;
+  }
+}
+
+:is(.waiting, .reveal) p {
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: 3px;
+  color: #fff;
+
+  @media (max-width: 640px) {
+    font-size: 15px;
+    letter-spacing: 1.88px;
+  }
+}
+
+.choose {
   position: relative;
-
-  background-image: url("./images/bg-triangle.svg");
-  background-position: center;
-  background-size: contain;
-  background-repeat: no-repeat;
-
+  background: url("./images/bg-triangle.svg") no-repeat center / contain;
   width: 300px;
   height: 285px;
+  margin: 24px auto 80px;
 
   &.bonus {
     background-image: url("./images/bg-pentagon.svg");
@@ -233,16 +281,11 @@ main {
     height: 345px;
   }
 
-  margin-block: 24px 80px;
-  margin-inline: auto;
-
   & .choice-btn {
     position: absolute;
-
     border-width: 24px;
-    border-style: solid;
-
     width: 198px;
+
     &.bonus {
       width: 145px;
     }
@@ -286,6 +329,7 @@ main {
 
     &[data-choice="lizard"] {
       display: none;
+
       &.bonus {
         display: block;
         top: 70%;
@@ -295,6 +339,7 @@ main {
 
     &[data-choice="spock"] {
       display: none;
+
       &.bonus {
         display: block;
         top: 15%;
@@ -304,26 +349,7 @@ main {
   }
 }
 
-@keyframes bounce {
-  0% {
-    transform: scale(1);
-  }
-  30% {
-    transform: scale(1.2);
-  }
-  50% {
-    transform: scale(0.9);
-  }
-  70% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
 .waiting {
-  display: none;
   align-items: stretch;
   justify-content: center;
   gap: 72px;
@@ -333,15 +359,6 @@ main {
     flex-direction: column;
     align-items: center;
     gap: 64px;
-  }
-
-  & p {
-    font-weight: 700;
-    font-size: 24px;
-    line-height: 32px;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    color: #fff;
   }
 
   & .skeleton-container {
@@ -358,11 +375,6 @@ main {
     }
   }
 
-  & .choice-btn {
-    border-width: 32px;
-    width: 292px;
-  }
-
   @media screen and (max-width: 640px) {
     gap: 50px;
 
@@ -371,48 +383,22 @@ main {
       gap: 16px;
     }
 
-    & p {
-      font-size: 15px;
-      letter-spacing: 1.88px;
-    }
-
     & .skeleton-container .skeleton {
       width: 110px;
-    }
-
-    & .choice-btn {
-      border-width: 15px;
-      width: 130px;
     }
   }
 }
 
 .reveal {
-  display: none;
   justify-content: center;
   align-items: stretch;
   gap: 56px;
 
-  & .user-choice,
-  .computer-choice {
+  & :is(.user-choice, .computer-choice) {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 64px;
-
-    & .choice-btn {
-      border-width: 32px;
-      width: 292px;
-    }
-
-    & p {
-      font-weight: 700;
-      font-size: 24px;
-      line-height: 32px;
-      text-transform: uppercase;
-      letter-spacing: 3px;
-      color: #fff;
-    }
   }
 
   & .result {
@@ -424,14 +410,14 @@ main {
 
     & p {
       font-size: 56px;
+      line-height: 1;
       font-weight: 700;
       letter-spacing: 0;
-      text-transform: uppercase;
+
       color: #fff;
     }
 
     & button {
-      text-transform: uppercase;
       background-color: #fff;
       color: #3b4262;
       font-size: 16px;
@@ -440,6 +426,7 @@ main {
       padding: 16px 60px;
       border-radius: 8px;
       cursor: pointer;
+      border: none;
 
       &:hover {
         color: #db2e4d;
@@ -450,12 +437,6 @@ main {
   @media screen and (max-width: 992px) {
     flex-wrap: wrap;
 
-    & .user-choice .choice-btn,
-    & .computer-choice .choice-btn {
-      width: 130px;
-      border-width: 15px;
-    }
-
     & .result {
       flex-basis: 100%;
       order: 3;
@@ -463,16 +444,9 @@ main {
   }
 
   @media screen and (max-width: 640px) {
-    & .user-choice,
-    & .computer-choice {
+    & :is(.user-choice, .computer-choice) {
       flex-direction: column-reverse;
       gap: 16px;
-    }
-
-    & .user-choice p,
-    & .computer-choice p {
-      font-size: 15px;
-      letter-spacing: 1.88px;
     }
   }
 }
@@ -481,7 +455,6 @@ footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   padding-inline: 32px;
   margin: 16px auto;
   max-width: 1320px;
@@ -496,16 +469,13 @@ footer {
   & .btn {
     font-size: 16px;
     letter-spacing: 2.5px;
-    text-transform: uppercase;
     color: #fff;
     background-color: transparent;
-
     padding: 12px 36px;
-
     border-radius: 8px;
     border: 1px solid #fff;
-
     cursor: pointer;
+
     &:hover {
       background-color: rgba(255, 255, 255, 0.2);
     }
@@ -522,14 +492,11 @@ dialog {
   flex-wrap: wrap;
   row-gap: 40px;
 
-  top: 50%;
-  left: 50%;
-  translate: -50% -50%;
-  z-index: 10;
+  inset: 0;
+  margin: auto;
   border: none;
   padding: 32px;
   border-radius: 8px;
-  background-color: #fff;
 
   &[open] {
     display: flex;
@@ -541,7 +508,6 @@ dialog {
     line-height: 1;
     letter-spacing: 0;
     font-weight: 700;
-    text-transform: uppercase;
   }
 
   & #close-rules {
@@ -573,8 +539,4 @@ dialog {
       order: 3;
     }
   }
-}
-
-.active {
-  display: flex;
 }
