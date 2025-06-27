@@ -133,11 +133,12 @@ function selectUserChoice(userChoice) {
       tie: "Draw",
     }[result];
 
-    if (result === "win") {
-      score++;
-      localStorage.setItem(STORAGE_KEYS.SCORE, score);
-      scoreElement.textContent = score;
-    }
+    if (result === "win") score++;
+    if (result === "lose") score--;
+    score = Math.max(score, 0);
+
+    localStorage.setItem(STORAGE_KEYS.SCORE, score);
+    scoreElement.textContent = score;
 
     switchScreen("reveal");
 
