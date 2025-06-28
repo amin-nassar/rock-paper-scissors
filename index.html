@@ -61,13 +61,25 @@
       </div>
     </main>
     <footer>
-      <button class="btn" id="mode">Mode</button>
+      <button class="btn" id="open-settings">Settings</button>
       <button class="btn" id="open-rules">Rules</button>
     </footer>
 
-    <dialog closedBy="any">
+    <dialog id="settings-dialog" closedBy="any">
+      <h3 class="title">Settings</h3>
+      <button id="close-settings" class="close">
+        <img src="./images/icon-close.svg" alt="Close" />
+      </button>
+      <div>
+        <button id="reset-score">Reset Score</button>
+        <button id="switch-modes">Use Bonus Mode</button>
+        <button id="switch-mute">Mute</button>
+      </div>
+    </dialog>
+
+    <dialog id="rules-dialog" closedBy="any">
       <h3 class="title">Rules</h3>
-      <button id="close-rules">
+      <button id="close-rules" class="close">
         <img src="./images/icon-close.svg" alt="Close" />
       </button>
       <img id="rules-img" src="./images/image-rules.svg" alt="Rules" />

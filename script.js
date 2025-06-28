@@ -40,7 +40,7 @@ const RULES_IMG_PATH_BY_MODE = {
   [GAME_MODES.BONUS]: "./images/image-rules-bonus.svg",
 };
 
-const STORAGE_KEYS = { SCORE: "rps_score", MODE: "rps_mode" };
+const STORAGE_KEYS = { SCORE: "rps_score", MODE: "rps_mode", MUTE: "rps_mute" };
 
 const SOUND_PATHS = {
   [GAME_EVENTS.DRAW]: "./sfx/draw.mp3",
@@ -66,15 +66,21 @@ const choiceButtons = screens.choose.querySelectorAll("button");
 const [userBtn, houseBtn] = screens.reveal.querySelectorAll(".choice-btn");
 const playAgainButton = screens.reveal.querySelector("#play-again");
 
-const modeButton = document.getElementById("mode");
-const openRulesDialogBtn = document.getElementById("open-rules");
+const openSettingsBtn = document.getElementById("open-settings");
+const openRulesBtn = document.getElementById("open-rules");
 
-const rulesDialog = document.querySelector("dialog");
-const closeRulesDialogBtn = document.getElementById("close-rules");
+const rulesDialog = document.getElementById("rules-dialog");
+const closeRulesBtn = document.getElementById("close-rules");
 const rulesImg = document.getElementById("rules-img");
 
+const settingsDialog = document.getElementById("settings-dialog");
+const closeSettingsBtn = document.getElementById("close-settings");
+const modeButton = document.getElementById("switch-modes");
+const muteButton = document.getElementById("switch-mute");
+const resetScoreButton = document.getElementById("reset-score");
+
 // -------- State --------
-let score, mode, rules, result;
+let score, mode, rules, result, mute;
 
 // -------- Functions --------
 function initializeScore() {
@@ -87,10 +93,24 @@ function initializeMode() {
   setMode(mode);
 }
 
+function initializeMute() {
+  mute = localStorage.getItem(STORAGE_KEYS.MUTE) || false;
+  muteButton.textContent = mute ? "unmute" : "mute";
+}
+
+function attachDialogListeners(dialog, openBtn, closBtn) {
+  openBtn.addEventListener("click", () => dialog.showModal());
+  closBtn.addEventListener("click", () => dialog.close());
+}
+
 function attachEventListeners() {
+  attachDialogListeners(rulesDialog, openRulesBtn, closeRulesBtn);
+  attachDialogListeners(settingsDialog, openSettingsBtn, closeSettingsBtn);
+
   modeButton.addEventListener("click", toggleMode);
-  openRulesDialogBtn.addEventListener("click", () => rulesDialog.showModal());
-  closeRulesDialogBtn.addEventListener("click", () => rulesDialog.close());
+  muteButton.addEventListener("click", toggleMute);
+  resetScoreButton.addEventListener("click", resetScore);
+
   playAgainButton.addEventListener("click", resetGame);
 
   screens.choose.addEventListener("click", (e) => {
@@ -108,11 +128,12 @@ function initializeAudio() {
 }
 
 function playSound(soundKey) {
+  if (mute) return;
   SOUNDS[soundKey].play();
 }
 
 function setModeButtonVisibility(visible = true) {
-  modeButton.style.visibility = visible ? "visible" : "hidden";
+  openSettingsBtn.style.visibility = visible ? "visible" : "hidden";
 }
 
 function handleUserChoice(userChoice) {
@@ -177,6 +198,8 @@ function setMode(newMode) {
   localStorage.setItem(STORAGE_KEYS.MODE, mode);
 
   const isBonus = mode === GAME_MODES.BONUS;
+  modeButton.textContent = isBonus ? "use original mode" : "use bonus mode";
+
   logoDiv.classList.toggle("bonus", isBonus);
   screens.choose.classList.toggle("bonus", isBonus);
   choiceButtons.forEach((btn) => btn.classList.toggle("bonus", isBonus));
@@ -184,6 +207,17 @@ function setMode(newMode) {
   rulesImg.src = RULES_IMG_PATH_BY_MODE[mode];
   rules = RULES_BY_MODE[mode];
   resetGame();
+}
+
+function resetScore() {
+  score = 0;
+  updateScore();
+}
+
+function toggleMute() {
+  mute = !mute;
+  muteButton.textContent = mute ? "unmute" : "mute";
+  localStorage.setItem(STORAGE_KEYS.MUTE, mute);
 }
 
 function resetGame() {
@@ -211,6 +245,7 @@ function determineWinner(userChoice, houseChoice) {
 function initializeGame() {
   initializeMode();
   initializeScore();
+  initializeMute();
   attachEventListeners();
   initializeAudio();
 }
