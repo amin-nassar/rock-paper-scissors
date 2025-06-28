@@ -16,7 +16,7 @@ body {
     var(--radial-gradient-end)
   );
   min-height: 100dvh;
-  padding-block: var(--spacing-24);
+  padding-block: var(--spacing-md);
 
   display: flex;
   flex-direction: column;
@@ -37,12 +37,12 @@ button {
   align-items: center;
   height: fit-content;
   width: clamp(300px, 85%, 700px);
-  padding-block: var(--spacing-16);
-  padding-inline: var(--spacing-32) var(--spacing-24);
-  margin: 0 auto var(--spacing-32);
+  padding-block: var(--spacing-xs);
+  padding-inline: var(--spacing-lg) var(--spacing-md);
+  margin: 0 auto var(--spacing-lg);
   border: var(--border-width-md) solid var(--header-outline);
   border-radius: var(--border-radius-lg);
-  gap: var(--spacing-4);
+  gap: var(--spacing-4xs);
 
   & .logo {
     align-self: stretch;
@@ -59,7 +59,7 @@ button {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    padding: var(--spacing-16) var(--spacing-48);
+    padding: var(--spacing-xs) var(--spacing-3xl);
     background-color: var(--color-light);
     border-radius: var(--border-radius-sm);
 
@@ -80,10 +80,10 @@ button {
   }
 
   @media screen and (max-width: 425px) {
-    padding: var(--spacing-12);
+    padding: var(--spacing-2xs);
 
     & .score {
-      padding: var(--spacing-8) var(--spacing-20);
+      padding: var(--spacing-3xs) var(--spacing-sm);
 
       & .title {
         font-size: var(--font-size-xs);
@@ -181,14 +181,14 @@ button {
 }
 
 main {
-  padding-block: var(--spacing-80) var(--spacing-16);
+  padding-block: var(--spacing-8xl) var(--spacing-xs);
   flex-grow: 1;
   display: flex;
   align-items: center;
   justify-content: center;
 
   @media screen and (max-width: 425px) {
-    padding-block: var(--spacing-24) var(--spacing-8);
+    padding-block: var(--spacing-md) var(--spacing-3xs);
   }
 }
 
@@ -237,7 +237,7 @@ main {
   background: url("../images/bg-triangle.svg") no-repeat center / contain;
   width: 300px;
   height: 285px;
-  margin: var(--spacing-24) auto var(--spacing-80);
+  margin: var(--spacing-md) auto var(--spacing-8xl);
 
   @media screen and (max-width: 480px) {
     width: 275px;
@@ -369,13 +369,13 @@ main {
 .waiting {
   align-items: stretch;
   justify-content: center;
-  gap: var(--spacing-72);
+  gap: var(--spacing-7xl);
 
   & > div {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--spacing-64);
+    gap: var(--spacing-6xl);
   }
 
   & .skeleton-container {
@@ -393,11 +393,11 @@ main {
   }
 
   @media screen and (max-width: 640px) {
-    gap: var(--spacing-48);
+    gap: var(--spacing-3xl);
 
     & > div {
       flex-direction: column-reverse;
-      gap: var(--spacing-16);
+      gap: var(--spacing-xs);
     }
 
     & .skeleton-container .skeleton {
@@ -409,13 +409,13 @@ main {
 .reveal {
   justify-content: center;
   align-items: stretch;
-  gap: var(--spacing-56);
+  gap: var(--spacing-4xl);
 
   & :is(.user-choice, .computer-choice) {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--spacing-64);
+    gap: var(--spacing-6xl);
   }
 
   & .result {
@@ -423,7 +423,7 @@ main {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: var(--spacing-16);
+    gap: var(--spacing-xs);
 
     & p {
       font-size: var(--font-size-2xl);
@@ -440,7 +440,7 @@ main {
       font-size: var(--font-size-sm);
       font-weight: var(--font-weight-semibold);
       letter-spacing: var(--font-letter-spacing-md);
-      padding: var(--spacing-16) var(--spacing-60);
+      padding: var(--spacing-xs) var(--spacing-5xl);
       border-radius: var(--border-radius-sm);
       border: none;
 
@@ -462,7 +462,7 @@ main {
   @media screen and (max-width: 640px) {
     & :is(.user-choice, .computer-choice) {
       flex-direction: column-reverse;
-      gap: var(--spacing-16);
+      gap: var(--spacing-xs);
     }
   }
 }
@@ -472,8 +472,8 @@ footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-inline: var(--spacing-32);
-  margin: var(--spacing-16) auto;
+  padding-inline: var(--spacing-lg);
+  margin: var(--spacing-xs) auto;
   max-width: 1320px;
 
   & .btn {
@@ -482,7 +482,7 @@ footer {
     color: var(--color-light);
     background-color: transparent;
 
-    padding: var(--spacing-12) var(--spacing-36);
+    padding: var(--spacing-2xs) var(--spacing-xl);
     border-radius: var(--border-radius-sm);
     border: var(--border-width-sm) solid var(--color-light);
 
@@ -501,12 +501,12 @@ dialog {
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  row-gap: var(--spacing-40);
+  row-gap: var(--spacing-2xl);
 
   inset: 0;
   margin: auto;
   border: none;
-  padding: var(--spacing-32);
+  padding: var(--spacing-lg);
   border-radius: var(--border-radius-sm);
 
   &[open] {
@@ -554,7 +554,7 @@ dialog {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: var(--spacing-16);
+    gap: var(--spacing-xs);
     min-width: fit-content;
     width: 60%;
     margin-inline: auto;
@@ -568,7 +568,7 @@ dialog {
       color: var(--color-dark);
       font-size: var(--font-size-sm);
       line-height: var(--font-line-height-sm);
-      padding: var(--spacing-12) var(--spacing-16);
+      padding: var(--spacing-2xs) var(--spacing-xs);
       border-radius: var(--border-radius-sm);
 
       &:hover {
