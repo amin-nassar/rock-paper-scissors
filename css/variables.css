@@ -1,0 +1,70 @@
+:root {
+  --scissors-border-color: hsl(39, 89%, 49%);
+  --scissors-shadow-color: hsl(34, 77%, 45%);
+
+  --paper-border-color: hsl(230, 89%, 62%);
+  --paper-shadow-color: hsl(230, 65%, 52%);
+
+  --rock-border-color: hsl(349, 71%, 52%);
+  --rock-shadow-color: hsl(349, 84%, 36%);
+
+  --lizard-border-color: hsl(261, 73%, 60%);
+  --lizard-shadow-color: hsl(261, 50%, 48%);
+
+  --spock-border-color: hsl(189, 59%, 53%);
+  --spock-shadow-color: hsl(189, 50%, 42%);
+
+  --color-light: hsl(0, 0%, 100%);
+  --color-dark: hsl(229, 25%, 31%);
+  --score-text: hsl(229, 64%, 46%);
+  --header-outline: hsl(217, 16%, 45%);
+
+  --border-width-sm: 1px;
+  --border-width-md: 3px;
+
+  --radial-gradient-end: hsl(237, 49%, 15%);
+  --radial-gradient-start: hsl(214, 47%, 23%);
+
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-36: 36px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-56: 56px;
+  --spacing-60: 60px;
+  --spacing-64: 64px;
+  --spacing-72: 72px;
+  --spacing-80: 80px;
+
+  --border-radius-none: 0;
+  --border-radius-sm: 8px;
+  --border-radius-lg: 16px;
+  --border-radius-circle: 50%;
+
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --font-line-height-sm: 1;
+  --font-line-height-md: 1.2;
+  --font-line-height-lg: 1.33333;
+
+  --font-letter-spacing-none: 0;
+  --font-letter-spacing-sm: 1.88px;
+  --font-letter-spacing-md: 2.5px;
+  --font-letter-spacing-lg: 3px;
+
+  --font-size-xs: 10px;
+  --font-size-sm: 16px;
+  --font-size-md: 24px;
+  --font-size-lg: 32px;
+  --font-size-xl: 40px;
+  --font-size-2xl: 56px;
+  --font-size-3xl: 64px;
+
+  --font-family: "Barlow Semi Condensed", sans-serif;
+}
