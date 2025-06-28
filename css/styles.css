@@ -108,9 +108,14 @@ button {
   &.disabled {
     cursor: default;
     pointer-events: none;
+
+    &:focus-visible {
+      outline: none;
+    }
   }
 
-  &:hover {
+  &:hover,
+  &:focus-visible {
     outline: 24px solid rgba(255, 255, 255, 0.05);
   }
 }
