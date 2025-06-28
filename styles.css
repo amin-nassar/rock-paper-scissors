@@ -32,8 +32,6 @@
 }
 
 body {
-  font-family: "Barlow Semi Condensed", sans-serif;
-  text-transform: uppercase;
   background: radial-gradient(
     at top,
     var(--radial-gradient-start),
@@ -44,6 +42,12 @@ body {
 
   display: flex;
   flex-direction: column;
+}
+
+body,
+button {
+  font-family: "Barlow Semi Condensed", sans-serif;
+  text-transform: uppercase;
 }
 
 .header {
@@ -538,7 +542,8 @@ footer {
     cursor: pointer;
 
     &:hover {
-      background-color: rgba(255, 255, 255, 0.2);
+      background-color: #fff;
+      color: #3b4262;
     }
   }
 }
