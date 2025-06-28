@@ -23,23 +23,18 @@ The game is fully responsive and supports sound effects, local storage persisten
 
 ### Features
 
-✅ Play Rock, Paper, Scissors against the computer
-
-✅ Bonus Mode: Rock, Paper, Scissors, Lizard, Spock
-
-✅ Responsive layout for all screen sizes
-
-✅ Score persists on refresh using localStorage
-
-✅ Sound effects for game events (win, lose, draw, pick).
-
+✅ Play Rock, Paper, Scissors against the computer.  
+✅ Bonus Mode: Rock, Paper, Scissors, Lizard, Spock.  
+✅ Responsive layout for all screen sizes.  
+✅ Score persists on refresh using localStorage  
+✅ Sound effects for game events (win, lose, draw, pick).  
 ✅ Settings dialog:
 
 - Switch between Original and Bonus mode
 - Mute/Un-mute sound effects
 - Reset score
 
-✅ Mode, score, and mute preference are preserved across sessions
+✅ Mode, score, and mute preference are preserved across sessions.
 
 ### Screenshot
 
