@@ -1,3 +1,5 @@
+// -------- Constants --------
+
 const GAME_MODES = { ORIGINAL: "ORIGINAL", BONUS: "BONUS" };
 
 const GAME_RESULTS = { WIN: "WIN", LOSE: "LOSE", DRAW: "DRAW" };
@@ -50,48 +52,118 @@ const SOUND_PATHS = {
 
 const SOUNDS = {};
 
+// -------- DOM Refs --------
 const screens = {
   choose: document.querySelector(".choose"),
   waiting: document.querySelector(".waiting"),
   reveal: document.querySelector(".reveal"),
 };
 
-const choiceButtons = screens.choose.querySelectorAll("button");
-const modeButton = document.getElementById("mode");
 const logoDiv = document.querySelector(".logo");
 const scoreElement = document.querySelector(".score .number");
+
+const choiceButtons = screens.choose.querySelectorAll("button");
+const [userBtn, houseBtn] = screens.reveal.querySelectorAll(".choice-btn");
+const playAgainButton = screens.reveal.querySelector("#play-again");
+
+const modeButton = document.getElementById("mode");
+const openRulesDialogBtn = document.getElementById("open-rules");
+
+const rulesDialog = document.querySelector("dialog");
+const closeRulesDialogBtn = document.getElementById("close-rules");
 const rulesImg = document.getElementById("rules-img");
-const openRulesBtn = document.getElementById("open-rules");
-const closeRulesBtn = document.getElementById("close-rules");
-const dialog = document.querySelector("dialog");
-const playAgainButton = document.getElementById("play-again");
 
-let score, mode, rules;
+// -------- State --------
+let score, mode, rules, result;
 
-function initializeGame() {
+// -------- Functions --------
+function initializeScore() {
   score = parseInt(localStorage.getItem(STORAGE_KEYS.SCORE)) || 0;
-  mode = localStorage.getItem(STORAGE_KEYS.MODE) || GAME_MODES.ORIGINAL;
   scoreElement.textContent = score;
+}
 
-  attachEventListeners();
-  initializeAudio();
-
+function initializeMode() {
+  mode = localStorage.getItem(STORAGE_KEYS.MODE) || GAME_MODES.ORIGINAL;
   setMode(mode);
-  resetGame();
 }
 
 function attachEventListeners() {
   modeButton.addEventListener("click", toggleMode);
-  openRulesBtn.addEventListener("click", () => dialog.showModal());
-  closeRulesBtn.addEventListener("click", () => dialog.close());
+  openRulesDialogBtn.addEventListener("click", () => rulesDialog.showModal());
+  closeRulesDialogBtn.addEventListener("click", () => rulesDialog.close());
   playAgainButton.addEventListener("click", resetGame);
 
   screens.choose.addEventListener("click", (e) => {
     const userChoice = e.target.dataset.choice;
     if (!(userChoice in rules)) return;
-    playSound(GAME_EVENTS.USER_CHOICE);
-    selectUserChoice(userChoice);
+    handleUserChoice(userChoice);
   });
+}
+
+function initializeAudio() {
+  for (const soundKey in SOUND_PATHS) {
+    const audioElement = new Audio(SOUND_PATHS[soundKey]);
+    SOUNDS[soundKey] = audioElement;
+  }
+}
+
+function playSound(soundKey) {
+  SOUNDS[soundKey].play();
+}
+
+function setModeButtonVisibility(visible = true) {
+  modeButton.style.visibility = visible ? "visible" : "hidden";
+}
+
+function handleUserChoice(userChoice) {
+  playSound(GAME_EVENTS.USER_CHOICE);
+  setModeButtonVisibility(false);
+  showWaitingScreen(userChoice);
+
+  prepareRevealScreen(userChoice);
+
+  setTimeout(showRevealScreen, 3000);
+}
+
+function showWaitingScreen(userChoice) {
+  const userChoiceBtn = screens.waiting.querySelector(".choice-btn");
+  userChoiceBtn.setAttribute("data-choice", userChoice);
+
+  switchScreen("waiting");
+
+  setTimeout(() => playSound(GAME_EVENTS.HOUSE_CHOICE), 500);
+}
+
+function prepareRevealScreen(userChoice) {
+  const houseChoice = getHouseChoice();
+
+  userBtn.setAttribute("data-choice", userChoice);
+  houseBtn.setAttribute("data-choice", houseChoice);
+
+  result = determineWinner(userChoice, houseChoice);
+
+  document.getElementById("result-text").textContent = TEXT_BY_RESULT[result];
+}
+
+function showRevealScreen() {
+  updateScore(result);
+  switchScreen("reveal");
+  setModeButtonVisibility(true);
+
+  playSound(result);
+
+  if (result === GAME_RESULTS.DRAW) return;
+  const winnerBtn = result === GAME_RESULTS.WIN ? userBtn : houseBtn;
+  winnerBtn.classList.add("winner");
+}
+
+function updateScore(result) {
+  if (result === GAME_RESULTS.WIN) score++;
+  if (result === GAME_RESULTS.LOSE) score--;
+  score = Math.max(score, 0);
+
+  localStorage.setItem(STORAGE_KEYS.SCORE, score);
+  scoreElement.textContent = score;
 }
 
 function toggleMode() {
@@ -102,20 +174,20 @@ function toggleMode() {
 
 function setMode(newMode) {
   mode = newMode;
-  localStorage.setItem(STORAGE_KEYS.MODE, newMode);
+  localStorage.setItem(STORAGE_KEYS.MODE, mode);
 
-  const isBonus = newMode === GAME_MODES.BONUS;
+  const isBonus = mode === GAME_MODES.BONUS;
   logoDiv.classList.toggle("bonus", isBonus);
   screens.choose.classList.toggle("bonus", isBonus);
   choiceButtons.forEach((btn) => btn.classList.toggle("bonus", isBonus));
 
-  rules = RULES_BY_MODE[newMode];
-
-  rulesImg.src = RULES_IMG_PATH_BY_MODE[newMode];
+  rulesImg.src = RULES_IMG_PATH_BY_MODE[mode];
+  rules = RULES_BY_MODE[mode];
   resetGame();
 }
 
 function resetGame() {
+  result = "";
   switchScreen("choose");
   document.querySelector(".winner")?.classList.remove("winner");
 }
@@ -136,52 +208,11 @@ function determineWinner(userChoice, houseChoice) {
   return userBeatsHouse ? GAME_RESULTS.WIN : GAME_RESULTS.LOSE;
 }
 
-function selectUserChoice(userChoice) {
-  modeButton.style.visibility = "hidden";
-
-  const userChoiceBtn = screens.waiting.querySelector(".choice-btn");
-  userChoiceBtn.setAttribute("data-choice", userChoice);
-  switchScreen("waiting");
-
-  setTimeout(() => playSound(GAME_EVENTS.HOUSE_CHOICE), 500);
-
-  const houseChoice = getHouseChoice();
-  const [userBtn, houseBtn] = screens.reveal.querySelectorAll(".choice-btn");
-  userBtn.setAttribute("data-choice", userChoice);
-  houseBtn.setAttribute("data-choice", houseChoice);
-  const result = determineWinner(userChoice, houseChoice);
-
-  document.getElementById("result-text").textContent = TEXT_BY_RESULT[result];
-
-  setTimeout(() => {
-    if (result === GAME_RESULTS.WIN) score++;
-    if (result === GAME_RESULTS.LOSE) score--;
-    score = Math.max(score, 0);
-
-    localStorage.setItem(STORAGE_KEYS.SCORE, score);
-    scoreElement.textContent = score;
-
-    switchScreen("reveal");
-    modeButton.style.visibility = "visible";
-
-    playSound(result);
-
-    if (result === GAME_RESULTS.DRAW) return;
-    const winnerBtn = result === GAME_RESULTS.WIN ? userBtn : houseBtn;
-    winnerBtn.classList.add("winner");
-  }, 3000);
-}
-
-function initializeAudio() {
-  for (const soundKey in SOUND_PATHS) {
-    const audioElement = new Audio(SOUND_PATHS[soundKey]);
-    // audioElement.load();
-    SOUNDS[soundKey] = audioElement;
-  }
-}
-
-function playSound(soundKey) {
-  SOUNDS[soundKey].play();
+function initializeGame() {
+  initializeMode();
+  initializeScore();
+  attachEventListeners();
+  initializeAudio();
 }
 
 initializeGame();
