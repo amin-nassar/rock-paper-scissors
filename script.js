@@ -98,9 +98,9 @@ function initializeMute() {
   setMute(mute);
 }
 
-function attachDialogListeners(dialog, openBtn, closBtn) {
+function attachDialogListeners(dialog, openBtn, closeBtn) {
   openBtn.addEventListener("click", () => dialog.showModal());
-  closBtn.addEventListener("click", () => dialog.close());
+  closeBtn.addEventListener("click", () => dialog.close());
 }
 
 function attachEventListeners() {

@@ -44,10 +44,12 @@ body {
   flex-direction: column;
 }
 
-body,
-button {
+:is(body, button) {
   font-family: "Barlow Semi Condensed", sans-serif;
   text-transform: uppercase;
+}
+
+button {
   cursor: pointer;
 }
 
