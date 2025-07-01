@@ -24,17 +24,37 @@
     </header>
     <main>
       <div class="choose active">
-        <button class="choice-btn" data-choice="paper"></button>
-        <button class="choice-btn" data-choice="scissors"></button>
-        <button class="choice-btn" data-choice="rock"></button>
-        <button class="choice-btn" data-choice="lizard"></button>
-        <button class="choice-btn" data-choice="spock"></button>
+        <button
+          class="choice-btn"
+          data-choice="paper"
+          aria-label="Paper"
+        ></button>
+        <button
+          class="choice-btn"
+          data-choice="scissors"
+          aria-label="Scissors"
+        ></button>
+        <button
+          class="choice-btn"
+          data-choice="rock"
+          aria-label="Rock"
+        ></button>
+        <button
+          class="choice-btn"
+          data-choice="lizard"
+          aria-label="Lizard"
+        ></button>
+        <button
+          class="choice-btn"
+          data-choice="spock"
+          aria-label="Spock"
+        ></button>
       </div>
 
       <div class="waiting">
         <div class="user-choice">
           <p>You Picked</p>
-          <button class="choice-btn disabled"></button>
+          <button class="choice-btn disabled" aria-label="User Choice"></button>
         </div>
 
         <div class="computer-choice">
@@ -48,7 +68,7 @@
       <div class="reveal">
         <div class="user-choice">
           <p>You Picked</p>
-          <button class="choice-btn disabled"></button>
+          <button class="choice-btn disabled" aria-label="User Choice"></button>
         </div>
         <div class="result">
           <p id="result-text">You Lose</p>
@@ -56,7 +76,10 @@
         </div>
         <div class="computer-choice">
           <p>The House Picked</p>
-          <button class="choice-btn disabled"></button>
+          <button
+            class="choice-btn disabled"
+            aria-label="House Choice"
+          ></button>
         </div>
       </div>
     </main>
